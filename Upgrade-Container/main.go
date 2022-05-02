@@ -29,8 +29,7 @@ func main() {
 	flag.Parse()
 
 	if *deploymentName == "" || *imageName == "" {
-		fmt.Println("specify deployment name")
-		os.Exit(0)
+		panic("Not specify deployment name or image name")
 	}
 
 	config, err := clientcmd.BuildConfigFromFlags("", *kubeconfig)
