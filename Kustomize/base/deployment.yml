@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sammy-app
+  namespace: default
+  labels:
+    app: sammy-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sammy-app
+  template:
+    metadata:
+      labels:
+        app: sammy-app
+    spec:
+      containers:
+      - name: server
+        image: nginx:1.20
+        volumeMounts:
+        - name: sammy-app
+          mountPath: /usr/share/nginx/html
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        resources:
+          requests:
+            cpu: 100m
+            memory: "128M"
+          limits:
+            cpu: 100m
+            memory: "256M"
+        env:
+        - name: LOG_LEVEL
+          value: "DEBUG"
+      volumes:
+      - name: sammy-app
+        configMap:
+          name: sammy-app
+          items:
+          - key: body
+            path: index.html

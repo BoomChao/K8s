@@ -1,0 +1,9 @@
+---
+bases:
+- ../../base
+
+patchesStrategicMerge:  
+- configmap_patch.yml
+- deployment_patch.yml
+
+#其实从这里就可以看出，这个文件夹里的文件就是对上面base文件夹里面这两个同名文件的补充
