@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-hostpath
+spec: 
+  containers:
+  - image: wangyanglinux/myapp:v1
+    imagePullPolicy: IfNotPresent
+    name: container1
+    volumeMounts:
+    - mountPath: /cache   #volume挂载的路径
+      name: cache-volume
+  volumes:
+  - name: cache-volume
+    hostPath:           
+      path: /data         #将主机上的"/data"目录挂载到容器中的"/cache"目录
+      type: DirectoryOrCreate
+
+
+# 1.hostPath可以将容器的目录挂载到主机上的目录,相当于docker中的volume
