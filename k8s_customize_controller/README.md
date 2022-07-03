@@ -1,8 +1,8 @@
 ### 开发自定义的 controller 的整个过程   
 
-执行脚本自动生成文件:./generate-groups.sh all \
-k8s_customize_controller/pkg/client \
-k8s_customize_controller/pkg/apis \
+执行脚本自动生成文件:./generate-groups.sh all \\   
+k8s_customize_controller/pkg/client \\   
+k8s_customize_controller/pkg/apis \\   
 bolingcavalry:v1
 
 1.创建 CRD(Custom Resources Definition)，令 k8s 明白我们自定的 API 对象
