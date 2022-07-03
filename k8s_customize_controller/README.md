@@ -1,4 +1,4 @@
-#### 开发自定义的 controller 的整个过程   
+### 开发自定义的 controller 的整个过程   
 
 执行脚本自动生成文件:./generate-groups.sh all \
 k8s_customize_controller/pkg/client \
@@ -17,5 +17,5 @@ bolingcavalry:v1
 ./k8s_customize_controller --alsologtostderr
    
 5.这里日志打印选用的是 glog,而不是 golang 自带的 log
-
-glog是Google开源日志库 C++ glog 的Go语言简洁版,
+ 
+glog 是 Google 开源日志库 C++ glog 的Go语言简洁版,
