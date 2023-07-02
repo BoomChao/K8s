@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "my-ghost.fullname" . }}
+  labels:
+{{ include "my-ghost.labels" . | indent 4 }}
+spec:
+  selector:
+    matchLabels:
+{{ include "my-ghost.selectorLabels" . | indent 6 }}
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+{{ include "my-ghost.selectorLabels" . | indent 8 }}
+    spec:
+      containers:
+        - name: ghost-app
+          image: {{ .Values.image }}
+          ports:
+            - containerPort: 2368
+          env:
+            - name: NODE_ENV
+              value: {{ .Values.node_env | default "production" }}
+            {{- if .Values.url }}
+            - name: url
+              value: http://{{ .Values.url }}
+            {{- end }}

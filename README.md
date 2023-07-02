@@ -18,3 +18,5 @@ app就表示容器名字
 
 7. k8s_customize_controller 是自定义一个 Controller，只是实现了Controller部分，其他部分如 informer 是用   
 代码生成工具直接生成的
+
+8. helm-chart 是自己开发出的一个Ghost的chart
