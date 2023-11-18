@@ -65,7 +65,7 @@ func NewController(kubeclientset kubernetes.Interface, studentclient clientset.I
 
 	glog.Info("Setting up event handlers")
 
-	//set up an event handler for when Student resoucres change
+	//set up an event handler for when Student resources change
 	studentInformer.Informer().AddEventHandler(cache.ResourceEventHandlerFuncs{
 		AddFunc: controller.enqueueStudent,
 		UpdateFunc: func(oldObj, newObj interface{}) {
@@ -83,7 +83,7 @@ func NewController(kubeclientset kubernetes.Interface, studentclient clientset.I
 	return controller
 }
 
-//在此处开始controller的业务
+// 在此处开始controller的业务
 func (c *Controller) Run(threadiness int, stopCh <-chan struct{}) error {
 	defer runtime.HandleCrash()
 	defer c.workqueue.ShutDown()
@@ -111,7 +111,7 @@ func (c *Controller) runWorker() {
 	}
 }
 
-//取数据处理
+// 取数据处理
 func (c *Controller) processNextWorkItem() bool {
 	obj, shutdown := c.workqueue.Get()
 	if shutdown {
@@ -148,7 +148,7 @@ func (c *Controller) processNextWorkItem() bool {
 	return true
 }
 
-//处理
+// 处理
 func (c *Controller) syncHandler(key string) error {
 	namespace, name, err := cache.SplitMetaNamespaceKey(key)
 	if err != nil {
@@ -175,7 +175,7 @@ func (c *Controller) syncHandler(key string) error {
 	return nil
 }
 
-//数据先入缓存，再入队列
+// 数据先入缓存，再入队列
 func (c *Controller) enqueueStudent(obj interface{}) {
 	var key string
 	var err error
@@ -188,7 +188,7 @@ func (c *Controller) enqueueStudent(obj interface{}) {
 	c.workqueue.AddRateLimited(key)
 }
 
-//删除操作
+// 删除操作
 func (c *Controller) enqueueStudentForDelete(obj interface{}) {
 	var key string
 	var err error
