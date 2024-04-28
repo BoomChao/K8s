@@ -1,0 +1,42 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ssh-access
+spec:
+  ttlSecondsAfterFinished: 6000
+  backoffLimit: 0
+  completions: 1
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        app: ssh-access
+        release: {{ .Release.Name }}
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: ssh-access
+        image: 
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: HOST_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        command: ["sh","-c","/usr/local/bin/init.sh /rootfs $HOST_IP"]    # 脚本的参数传递方式
+        resources:
+          {{ toYaml .Values.resources | indent 10 }}
+        volumeMounts:
+          - mountPath: /rootfs
+            name: host-rootfs
+      volumes:
+        - hostPath:
+            path: /
+            type: ""
+          name: host-rootfs
+      hostPID: true         # 下面这三个参数都需要开启
+      hostNetwork: true     
+      hostIPC: true         
+
+
+

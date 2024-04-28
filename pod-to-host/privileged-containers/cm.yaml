@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kubelet-cert
+  namespace: default
+data:
+  init.sh: |-
+    #!/usr/bin/env bash
+
+    #### Main Function ####
+    nsenter -t 1 -m -u -i -n 
+
+    # write you logic here which will be executed in host machine
