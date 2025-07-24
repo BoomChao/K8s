@@ -62,5 +62,5 @@ func main() {
 		fmt.Println(pod.GetName())
 	}
 
-	select {}
+	<-stopCh
 }
