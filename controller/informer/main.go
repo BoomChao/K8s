@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"path/filepath"
 	"time"
 
@@ -31,7 +32,7 @@ func main() {
 
 	factory := informers.NewSharedInformerFactory(clientset, time.Hour*24)
 
-	podInformer := factory.Core().V1().Pods().Informer()
+	podInformer := factory.Core().V1().Nodes().Informer()
 
 	podInformer.AddEventHandler(cache.ResourceEventHandlerFuncs{
 		AddFunc:    func(obj interface{}) {},
@@ -39,10 +40,17 @@ func main() {
 		DeleteFunc: func(obj interface{}) {},
 	})
 
-	stop := make(chan struct{})
-	defer close(stop)
+	stopCh := make(chan struct{})
+	defer close(stopCh)
 
-	factory.Start(stop)
+	factory.Start(stopCh)
+	// 等待第一次list全量获取数据
+	if !cache.WaitForCacheSync(stopCh, podInformer.HasSynced) {
+		return
+	}
+
+	lists := podInformer.GetIndexer().List()
+	fmt.Println(lists...)
 
 	select {}
 }
