@@ -49,6 +49,7 @@ func main() {
 		return
 	}
 
+	// 这里直接从上面的informer的cache里面拿了
 	lists := podInformer.GetIndexer().List()
 	fmt.Println(lists...)
 
