@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"time"
 
+	corev1 "k8s.io/api/core/v1"
 	"k8s.io/client-go/informers"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/cache"
@@ -30,13 +31,18 @@ func main() {
 		panic(err)
 	}
 
-	factory := informers.NewSharedInformerFactory(clientset, time.Hour*24)
+	factory := informers.NewSharedInformerFactory(clientset, time.Second*10)
 
-	podInformer := factory.Core().V1().Nodes().Informer()
+	podInformer := factory.Core().V1().Pods().Informer()
 
 	podInformer.AddEventHandler(cache.ResourceEventHandlerFuncs{
-		AddFunc:    func(obj interface{}) {},
-		UpdateFunc: func(oldObj, newObj interface{}) {},
+		AddFunc: func(obj interface{}) {},
+		// 由于设定了resync的时间为10s,所以这个调用会10s执行一次;即informer会10s将全量的数据塞入到updateFunc的处理逻辑中
+		UpdateFunc: func(oldObj, newObj interface{}) {
+			pod := newObj.(*corev1.Pod)
+			podName := pod.GetName()
+			fmt.Println(time.Now(), " Pod updated -> ", podName)
+		},
 		DeleteFunc: func(obj interface{}) {},
 	})
 
@@ -51,7 +57,10 @@ func main() {
 
 	// 这里直接从上面的informer的cache里面拿了
 	lists := podInformer.GetIndexer().List()
-	fmt.Println(lists...)
+	for id := range lists {
+		pod := lists[id].(*corev1.Pod)
+		fmt.Println(pod.GetName())
+	}
 
 	select {}
 }
