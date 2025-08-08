@@ -1,5 +1,8 @@
 ### 开发自定义的 controller 的整个过程   
 
+前置:需要提交去[这里下](https://github.com/kubernetes/code-generator/tree/v0.27.0 )载好对应的code-generator的工具
+使用的go语言是1.18就去下载对应的go.mod也是1.18的版本
+
 执行脚本自动生成文件:./generate-groups.sh all \\   
 k8s_customize_controller/pkg/client \\   
 k8s_customize_controller/pkg/apis \\   
